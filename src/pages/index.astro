@@ -1,0 +1,152 @@
+---
+import '../styles/global.css';
+import {
+  KSMOOT_COLUMNS,
+  MARATHON_KSMOOTS,
+  splitAt,
+  formatHMS,
+  formatMS,
+  paceFromGoal,
+} from '../scripts/pace.js';
+
+const PACE_ROWS = [];
+for (let sec = 4 * 60 + 55; sec <= 14 * 60 + 35; sec += 5) {
+  PACE_ROWS.push(sec);
+}
+
+const DEFAULT_GOAL_SEC = 4 * 3600;
+const DEFAULT_PACE = paceFromGoal(DEFAULT_GOAL_SEC);
+
+const columnLabel = (k: number) => (k === MARATHON_KSMOOTS ? 'Finish' : String(k));
+const isMarathon = (k: number) => k === MARATHON_KSMOOTS;
+---
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Marathon pace chart in kilosmoots." />
+    <title>Smoot Marathon Pace Chart</title>
+  </head>
+  <body>
+    <main>
+      <header>
+        <img class="logo" src={`${import.meta.env.BASE_URL}notch-logo.png`} alt="Notch Run Club" width="864" height="341" />
+        <h1>Smoot Marathon Pace Chart</h1>
+        <p class="tagline">
+          Pace yourself in <a href="https://en.wikipedia.org/wiki/Smoot" target="_blank" rel="noopener">kilosmoots</a> &mdash; the only honest unit of distance. A marathon is 24.79 kSmoots.
+        </p>
+      </header>
+
+      <section class="calculator">
+        <h2>Goal calculator</h2>
+        <div class="calc-grid">
+          <label>
+            Goal marathon time
+            <input
+              id="goal"
+              type="text"
+              value="4:00:00"
+              inputmode="numeric"
+              pattern="[0-9:]*"
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <span class="hint" id="hint"></span>
+          </label>
+          <div class="pace-output">
+            <span class="pace-label">Required pace</span>
+            <span class="pace-value" id="pace">{formatMS(DEFAULT_PACE)}</span>
+          </div>
+        </div>
+
+        <h3>Cumulative splits</h3>
+        <div class="splits-wrap">
+          <table class="splits">
+            <thead>
+              <tr>
+                <th>kSmoot</th>
+                {KSMOOT_COLUMNS.map((k) => (
+                  <th class={isMarathon(k) ? 'marathon-col' : ''}>{columnLabel(k)}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="splits-row">
+                <th>Time</th>
+                {KSMOOT_COLUMNS.map((k) => (
+                  <td class={isMarathon(k) ? 'marathon-col' : ''}>{formatHMS(splitAt(DEFAULT_PACE, k))}</td>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <hr />
+
+      <section class="chart">
+        <h2>Full pace chart</h2>
+        <p class="chart-note">
+          Rows: pace per kilosmoot (5-second steps). Columns: cumulative time at each kilosmoot. Scroll within the chart.
+        </p>
+        <div class="chart-scroll">
+          <table class="chart-table">
+            <thead>
+              <tr>
+                <th>Pace / kS</th>
+                {KSMOOT_COLUMNS.map((k) => (
+                  <th class={isMarathon(k) ? 'marathon-col' : ''}>{columnLabel(k)}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {PACE_ROWS.map((paceSec) => (
+                <tr>
+                  <th>{formatMS(paceSec)}</th>
+                  {KSMOOT_COLUMNS.map((k) => (
+                    <td class={isMarathon(k) ? 'marathon-col' : ''}>{formatHMS(splitAt(paceSec, k))}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer>
+        <p>
+          Inspired by <a href="https://www.notchrunclub.com" target="_blank" rel="noopener">Notch Run Club</a>.
+          The smoot &mdash; 1.7018&nbsp;m &mdash; is named after Oliver R. Smoot,
+          whose 1958 MIT prank measured Boston&rsquo;s Harvard Bridge at 364.4 smoots plus an ear.
+        </p>
+      </footer>
+    </main>
+
+    <script>
+      import { parseHMS, formatHMS, formatMS, splitAt, paceFromGoal, KSMOOT_COLUMNS } from '../scripts/pace.js';
+
+      const goalInput = document.getElementById('goal') as HTMLInputElement;
+      const paceEl = document.getElementById('pace')!;
+      const hintEl = document.getElementById('hint')!;
+      const splitsRow = document.getElementById('splits-row')!;
+      const splitCells = Array.from(splitsRow.querySelectorAll('td'));
+
+      function recompute() {
+        const goalSec = parseHMS(goalInput.value);
+        if (goalSec === null || goalSec <= 0) {
+          hintEl.textContent = 'Use H:MM:SS (e.g. 4:00:00)';
+          return;
+        }
+        hintEl.textContent = '';
+        const pace = paceFromGoal(goalSec);
+        paceEl.textContent = formatMS(pace);
+        KSMOOT_COLUMNS.forEach((k, i) => {
+          splitCells[i].textContent = formatHMS(splitAt(pace, k));
+        });
+      }
+
+      goalInput.addEventListener('input', recompute);
+      recompute();
+    </script>
+  </body>
+</html>
