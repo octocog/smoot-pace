@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:www.notchrunclub.com)"
+      "WebFetch(domain:www.notchrunclub.com)",
+      "Read(//private/tmp/**)",
+      "Bash(\"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\" --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --window-size=1300,2200 --virtual-time-budget=6000 --screenshot=/tmp/smoot.png \"http://localhost:4322/smoot-pace/\")",
+      "Read(//tmp/**)"
     ]
   }
 }

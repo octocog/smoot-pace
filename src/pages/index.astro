@@ -33,6 +33,12 @@ const ogImageURL = new URL(`${import.meta.env.BASE_URL}og.png`, Astro.site);
     <meta name="description" content={SITE_DESC} />
     <link rel="canonical" href={canonicalURL} />
     <link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Rubik+Distressed&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    />
     <title>{SITE_TITLE}</title>
 
     <!-- Open Graph -->
@@ -53,8 +59,14 @@ const ogImageURL = new URL(`${import.meta.env.BASE_URL}og.png`, Astro.site);
     <meta name="twitter:image" content={ogImageURL} />
   </head>
   <body>
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker__track">
+        <span>Pace yourself in kilosmoots</span><span>The only honest unit of distance</span><span>A marathon is 24.79 kSmoots</span><span>1 smoot = 1.7018 m</span><span>Pace yourself in kilosmoots</span><span>The only honest unit of distance</span><span>A marathon is 24.79 kSmoots</span><span>1 smoot = 1.7018 m</span>
+      </div>
+    </div>
     <main>
       <header>
+        <span class="stamp">364.4 Smoots + 1 Ear</span>
         <img class="logo" src={`${import.meta.env.BASE_URL}notch-logo.png`} alt="Notch Run Club" width="864" height="341" />
         <h1>Smoot Marathon Pace Chart</h1>
         <p class="tagline">
@@ -63,7 +75,7 @@ const ogImageURL = new URL(`${import.meta.env.BASE_URL}og.png`, Astro.site);
       </header>
 
       <section class="calculator">
-        <h2>Goal calculator</h2>
+        <h2><span class="num">01</span> Goal calculator</h2>
         <div class="calc-grid">
           <label>
             Goal marathon time
@@ -107,10 +119,10 @@ const ogImageURL = new URL(`${import.meta.env.BASE_URL}og.png`, Astro.site);
         </div>
       </section>
 
-      <hr />
+      <div class="torn" role="presentation"></div>
 
       <section class="chart">
-        <h2>Full pace chart</h2>
+        <h2><span class="num">02</span> Full pace chart</h2>
         <p class="chart-note">
           Rows: pace per kilosmoot (5-second steps). Columns: cumulative time at each kilosmoot. Scroll within the chart.
         </p>
