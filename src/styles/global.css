@@ -1,14 +1,15 @@
 :root {
-  --bg: #141615;             /* Notch dark */
-  --bg-elev: #1c1e1d;
-  --fg: #f5f5f5;
-  --fg-dim: #a0a0a0;
-  --brand: #661c29;          /* Notch maroon */
-  --brand-bright: #a81010;   /* Notch bright red */
+  --bg: #661c29;             /* Notch maroon (now the canvas) */
+  --bg-elev: #4d1620;        /* deeper maroon for fields & sticky headers */
+  --fg: #f3e7e3;             /* warm cream */
+  --fg-dim: #d6b3aa;         /* muted rose */
+  --heading: #ffffff;        /* white headings */
+  --brand: #f0b8a0;          /* soft rose accent (on maroon) */
+  --brand-bright: #ffd9c2;   /* bright peach for emphasis */
   --accent: var(--brand);
-  --border: rgba(255, 255, 255, 0.1);
-  --border-strong: rgba(255, 255, 255, 0.2);
-  --hover: rgba(255, 255, 255, 0.04);
+  --border: rgba(255, 255, 255, 0.14);
+  --border-strong: rgba(255, 255, 255, 0.28);
+  --hover: rgba(255, 255, 255, 0.06);
 
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
@@ -59,6 +60,7 @@ header h1 {
   letter-spacing: -0.02em;
   margin: 0 0 0.5rem;
   text-transform: uppercase;
+  color: var(--heading);
 }
 
 header .tagline {
@@ -73,6 +75,7 @@ h2 {
   font-weight: 700;
   margin: 0 0 1rem;
   letter-spacing: -0.01em;
+  color: var(--heading);
 }
 
 h3 {
